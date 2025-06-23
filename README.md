@@ -38,8 +38,8 @@ By the way, libraries such as [ghodss/yaml](https://github.com/ghodss/yaml) and 
   - The main maintainer is [@goccy](https://github.com/goccy), but we are also building a system to develop as a team with trusted developers
   - Since it is written from scratch, the code is easy to read for Gophers
 - An API structure that allows the use of not only `Encoder`/`Decoder` but also `Tokenizer` and `Parser` functionalities.
-  - [lexer.Tokenize](https://pkg.go.dev/github.com/goccy/go-yaml@v1.15.4/lexer#Tokenize)
-  - [parser.Parse](https://pkg.go.dev/github.com/goccy/go-yaml@v1.15.4/parser#Parse)
+  - [lexer.Tokenize](https://pkg.go.dev/github.com/goccy/go-yaml@v1.16.0/lexer#Tokenize)
+  - [parser.Parse](https://pkg.go.dev/github.com/goccy/go-yaml@v1.16.0/parser#Parse)
 - Filtering, replacing, and merging YAML content using YAML Path
 - Reversible transformation without using the AST for YAML that includes Anchors, Aliases, and Comments
 - Customize the Marshal/Unmarshal behavior for primitive types and third-party library types ([RegisterCustomMarshaler](https://pkg.go.dev/github.com/goccy/go-yaml#RegisterCustomMarshaler), [RegisterCustomUnmarshaler](https://pkg.go.dev/github.com/goccy/go-yaml#RegisterCustomUnmarshaler))
@@ -388,6 +388,24 @@ b: "hello"
 output result is the following:
 
 <img src="https://user-images.githubusercontent.com/209884/84148813-7aca8680-aa9a-11ea-8fc9-37dece2ebdac.png"></img>
+
+### 5.2 Merge YAML while preserving layout
+
+Use `MergeYAML` when you need to add data to an existing document without losing the original order or blank lines.
+
+```go
+base := []byte(`a: 1\n\nb: 2\n`)
+patch := []byte(`c: 3`)
+out, err := yaml.MergeYAML(base, patch)
+if err != nil {
+    panic(err)
+}
+fmt.Println(string(out))
+// a: 1
+//
+// b: 2
+// c: 3
+```
 
 
 # Tools
